@@ -75,10 +75,8 @@ Sois concis et professionnel. Une question à la fois."""
             response_format="wav"
         )
 
-        # Sauvegarder le fichier
-        with open(cache_path, "wb") as f:
-            async for chunk in response.iter_bytes():
-                f.write(chunk)
+        # Sauvegarder le fichier (response.content contient les bytes)
+        response.write_to_file(cache_path)
 
         logger.info("tts_generated", path=str(cache_path))
         return str(cache_path)
