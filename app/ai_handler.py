@@ -75,8 +75,20 @@ Sois concis et professionnel. Une question à la fois."""
             response_format="wav"
         )
 
-        # Sauvegarder le fichier (response.content contient les bytes)
-        response.write_to_file(cache_path)
+        # Sauvegarder d'abord en fichier temporaire
+        temp_path = self.audio_cache / f"{text_hash}_temp.wav"
+        response.write_to_file(temp_path)
+
+        # Convertir en 8000 Hz mono pour la téléphonie avec ffmpeg
+        import subprocess
+        subprocess.run([
+            "ffmpeg", "-y", "-i", str(temp_path),
+            "-ar", "8000", "-ac", "1", "-acodec", "pcm_s16le",
+            str(cache_path)
+        ], capture_output=True)
+
+        # Supprimer le fichier temporaire
+        temp_path.unlink(missing_ok=True)
 
         logger.info("tts_generated", path=str(cache_path))
         return str(cache_path)

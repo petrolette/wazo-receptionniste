@@ -10,6 +10,7 @@ services:
       - ./recordings:/app/recordings
       - ./logs:/app/logs
       - /var/lib/asterisk/sounds/receptionniste:/app/audio_cache  # Partagé avec Asterisk
+      - /var/spool/asterisk/recording:/var/spool/asterisk/recording:ro  # Accès aux enregistrements
     logging:
       driver: "json-file"
       options:
