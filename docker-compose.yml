@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  receptionniste:
+    build: .
+    container_name: tksa-receptionniste
+    restart: unless-stopped
+    network_mode: host  # Accès direct à ARI sur localhost:5039
+    env_file:
+      - .env
+    volumes:
+      - ./recordings:/app/recordings
+      - ./logs:/app/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
