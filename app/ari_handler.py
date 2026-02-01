@@ -354,16 +354,16 @@ class ARIHandler:
 
     async def play_audio(self, channel_id: str, audio_path: str):
         """Joue un fichier audio."""
-        # Utiliser le chemin absolu pour ARI
-        # /app/audio_cache/fichier.wav -> /var/lib/asterisk/sounds/receptionniste/fichier.wav
-        filename = audio_path.split("/")[-1]
-        absolute_path = f"/var/lib/asterisk/sounds/receptionniste/{filename}"
+        # Utiliser le dossier custom de Wazo
+        # /app/audio_cache/fichier.wav -> custom/fichier
+        filename = audio_path.split("/")[-1].replace(".wav", "")
+        sound_path = f"custom/{filename}"
 
         async with self.http_session.post(
             f"{config.ari.url}/ari/channels/{channel_id}/play",
-            params={"media": f"sound:{absolute_path.replace('.wav', '')}"}
+            params={"media": f"sound:{sound_path}"}
         ) as resp:
-            logger.debug("playing_audio", channel_id=channel_id, path=absolute_path, status=resp.status)
+            logger.debug("playing_audio", channel_id=channel_id, path=sound_path, status=resp.status)
 
     async def play_greeting(self, channel_id: str):
         """Joue le message d'accueil."""
