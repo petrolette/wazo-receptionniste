@@ -4,8 +4,7 @@
 fastapi==0.109.2
 uvicorn[standard]==0.27.1
 
-# Asterisk ARI
-ari-py==0.1.3
+# Asterisk ARI (via aiohttp + websockets)
 websockets==12.0
 
 # OpenAI
