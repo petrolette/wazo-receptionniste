@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   receptionniste:
     build: .
@@ -11,6 +9,7 @@ services:
     volumes:
       - ./recordings:/app/recordings
       - ./logs:/app/logs
+      - /var/lib/asterisk/sounds/receptionniste:/app/audio_cache  # Partagé avec Asterisk
     logging:
       driver: "json-file"
       options:

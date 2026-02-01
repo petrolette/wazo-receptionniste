@@ -355,8 +355,9 @@ class ARIHandler:
     async def play_audio(self, channel_id: str, audio_path: str):
         """Joue un fichier audio."""
         # Convertir le chemin en format Asterisk
-        # sound:/path/to/file (sans extension)
-        sound_path = audio_path.replace(".wav", "")
+        # /app/audio_cache/fichier.wav -> receptionniste/fichier
+        filename = audio_path.split("/")[-1].replace(".wav", "")
+        sound_path = f"receptionniste/{filename}"
 
         async with self.http_session.post(
             f"{config.ari.url}/ari/channels/{channel_id}/play",
@@ -381,7 +382,7 @@ class ARIHandler:
                 "format": "wav",
                 "maxDurationSeconds": max_duration,
                 "maxSilenceSeconds": 2,  # Arrête après 2s de silence
-                "beep": False,
+                "beep": "no",
                 "terminateOn": "#",  # L'appelant peut appuyer sur # pour terminer
             }
         ) as resp:
